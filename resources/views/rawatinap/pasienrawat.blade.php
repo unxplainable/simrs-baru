@@ -11,51 +11,24 @@
 	</div>
 
 	<div class="card-header header-elements-inline">
-	<button type="button" class="btn bg-success btn-labeled btn-labeled-left" data-toggle="modal" data-target="#modal_theme_success"><b><i class="icon-reading"></i></b> Tambah Rawat Inap</button>
+	<button type="button" class="btn bg-success btn-labeled btn-labeled-left" data-toggle="modal" data-target="#add-modal"><b><i class="icon-reading"></i></b> Tambah Rawat Inap</button>
 	</div>
-	<table class="table datatable-basic">
+	<table class="table datatable-basic" id="pasienRawat-tables">
 		<thead>
 			<tr>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Job Title</th>
-				<th>DOB</th>
-				<th>Status</th>
+				<th>No</th>
+				<th>Nama Pasien</th>
+				<th>Tanggal Masuk</th>
+				<th>Ruang</th>
+                <th>Petugas</th>
 				<th class="text-center">Actions</th>
 			</tr>
 		</thead>
-		<tbody>
-			@php $no = 1; @endphp
-			@foreach ($pasienrawat as $data) 
-				<tr>
-					<td>{{$no++}}</td>
-					<td>{{$data->nama_pasien}}</td>
-					<td>{{$data->tanggal_masuk}}</td>
-					<td>{{$data->nama_kelas}}</td>
-					<td>{{$data->nama_user}}</td>
-					<td class="text-center">
-						<div class="list-icons">
-							<div class="dropdown">
-								<a href="#" class="list-icons-item" data-toggle="dropdown">
-									<i class="icon-menu9"></i>
-								</a>
-
-								<div class="dropdown-menu dropdown-menu-right">
-									<a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
-									<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
-									<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a>
-								</div>
-							</div>
-						</div>
-					</td>
-				</tr>
-			@endforeach
-		</tbody>
 	</table>
 </div>
 
 
-<div id="modal_theme_success" class="modal fade" tabindex="-2">
+<div id="add-modal" class="modal fade" tabindex="-2">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -73,7 +46,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-4 col-form-label">Nama Pasien :</label>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" placeholder="Masukkan Nama Pasien" id="nama_pasien" name="nama_pasien">
+                                        <select class="cari form-control form-control-select" name="cari"></select>
                                         </div>
                                     </div>
 
@@ -138,4 +111,192 @@
         </div>
     </div>
 
+    @foreach($pasienrawat as $data)
+    <div id="edit-modal{{$data->id_rawat_inap}}" class="modal fade" tabindex="-2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h6 class="modal-title">Form Pendaftaran Baru</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="card-body">
+                    <form action="#">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <fieldset>
+                                    <legend class="text-uppercase font-size-sm font-weight-bold"><i class="icon-reading mr-2"></i> IDENTITAS PASIEN</legend>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label">Nama Pasien :</label>
+                                        <div class="col-lg-8">
+                                        <input class="form-control" name="nama_pasien" value="{{$data->nama_pasien}}" disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label">Jenis Kelamin:</label>
+                                        <div class="col-lg-8">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                    <div class="uniform-choice"><span class="checked"><input type="radio" class="form-input-styled" name="gender" checked="" data-fouc=""></span></div>
+                                                    Laki - laki
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                    <div class="uniform-choice"><span><input type="radio" class="form-input-styled" name="gender" data-fouc=""></span></div>
+                                                    Perempuan
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label">Nama Petugas:</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label">Asuransi:</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control form-control-select">
+                                                <option>BPJS</option>
+                                                <option>Non BPJS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-4 col-form-label">Nama Poli:</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control form-control-select">
+                                                <option>Poli Anak</option>
+                                                <option>Poli Bedah</option>
+                                                <option>Poli Gigi</option>
+                                                <option>Poli THT</option>
+                                                <option>Poli Penyakit Dalam</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary">Simpan Data</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+
+
+
+<!--Modal delete -->
+<div id="delete-modal" class="modal fade" tabindex="-2">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h6 class="modal-title">Delete Data</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+    
+            <div class="modal-body">
+                <div class="col-xl-12">
+                    <div class="card-body">
+                        <p>Anda yakin ingin menghapus data ini?</p>
+                    </div>
+                </div>
+            </div>
+    
+             <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn bg-danger delete-data">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+ <!--End Modal delete-->
 @endsection
+
+@push('scripts')
+<script>
+
+// delete ruangan
+$(document).on('click', '.delete-modal', function(){
+       var id = $(this).attr("id");
+       $('.delete-data').attr("id", id);
+    });
+
+    $(document).on('click', '.delete-data', function(){
+        var id = $(this).attr("id"); 
+        $.ajax({
+           headers: {
+              'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+           },
+           url: "{{ route('pasienRawat.delete') }}",
+           method: "GET",
+           data: {id: id},
+           success: function(){          
+                Swal.fire({
+                    type: 'success',
+                    title: 'Berhasil dihapus!',
+                    text: 'Data yang dipilih telah dihapus!',
+                });
+                $('#delete-modal').modal('hide');
+                $('#pasienRawat-tables').DataTable().ajax.reload();
+           }
+        });
+       
+    });
+
+//GET ALL DATA
+        $(function(){
+            $('#pasienRawat-tables').DataTable({
+            order: [[ 2, "asc" ]],
+               prossessing: true,
+               serverside: true,
+               "bDestroy": true,
+               "columnDefs": [
+                    { className: "text-center", "targets": [ 5 ] }
+                ],
+               ajax: '{!! route('pasienRawat.dataJSON') !!}',
+               columns: [
+                  { name: 'id', data: 'DT_RowIndex' },
+                  {
+                     name: 'nama_pasien',
+                     data: 'nama_pasien'
+                  },
+                  {
+                     name: 'tanggal_masuk',
+                     data: 'tanggal_masuk',
+                  },
+                  {
+                     name: 'nama_kelas',
+                     data: 'nama_kelas',
+                  },
+                  {
+                     name: 'nama_user',
+                     data: 'nama_user',
+                  },
+                
+                  {
+                     name: 'action',
+                     data: 'action',
+                  },
+
+               ]
+            });
+         });
+        
+</script>
+
+@endpush
