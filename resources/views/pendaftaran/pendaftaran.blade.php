@@ -432,7 +432,7 @@
                Swal.fire({
                   type: 'success',
                   title: 'Data berhasil di ditambah!',
-                  text: 'Data pendaftaran pasien anda telah berhasil ditambahkan!',
+                  text: 'Data anda telah berhasil ditambahkan!',
                });
                $("#addForm")[0].reset();
                $('#add-modal').modal('hide');
