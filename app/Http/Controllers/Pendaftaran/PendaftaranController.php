@@ -7,6 +7,7 @@ use App\Pasien;
 use App\Daftar;
 use App\RolePembayaran;
 use Redirect;
+use Yajra\Datatables\Datatables;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\FunctionHelper;
@@ -18,6 +19,42 @@ class PendaftaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function pendaftaranJSON() {
+        $daftar = DB::table('daftar')
+                       ->join('poli','daftar.id_poli','=','poli.id')
+                       ->join('role_pembayaran','daftar.id_role_pembayaran', '=', 'role_pembayaran.id')
+                       ->join('pasien','daftar.id_pasien','=','pasien.id')
+                       ->join('users','daftar.id_user','=','users.id')
+                       ->select('daftar.id as id_daftar','poli.*','role_pembayaran.*','pasien.*','daftar.*','users.*')
+                       ->get();  
+
+        $data = [];
+        foreach($daftar as $pendaftaran) {
+            $data[] = [
+                'id' => $pendaftaran->id_daftar,
+                'tanggal_kunjungan' => $pendaftaran->tanggal_kunjungan,
+                'nama_pasien' => $pendaftaran->nama_pasien,
+                'nama_poli' => $pendaftaran->nama_poli,
+                'jenis_kelamin' => $pendaftaran->jenis_kelamin,
+                'id_role_pembayaran' => $pendaftaran->id_role_pembayaran,
+                'nama_user' => $pendaftaran->nama_user
+            ];
+        }
+        return Datatables::of($data)
+        ->addColumn('action', function ($data){
+            return'
+                <div class="list-icons">
+                    <a href="#" id="'.$data['id'].'" class="dropdown-item edit-data-pendaftaran" data-toggle="modal" data-target="#edit-modal"><button type="button" class="btn btn-primary"> <i class="icon-pencil5 mr-2"></i> Edit </button></a>
+                    <a href="#" id="'.$data['id'].'" class="dropdown-item delete-modal" data-toggle="modal" data-target="#delete-modal"><button type="button" class="btn btn-danger"> <i class="icon-trash mr-2"></i> Delete </button></i></a>
+                </div>
+            ';
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()
+        ->make(true);
+    }
+     
     public function index()
     {
         $menus = FunctionHelper::callMenu();
@@ -41,40 +78,6 @@ class PendaftaranController extends Controller
     public function create(Request $request)
     {
 
-        
-
-        $d = new Pasien();
-        $d->nama_pasien = $request->nama_pasien;
-        $d->jenis_kelamin = $request->jenis_kelamin;
-        $d->alamat = $request->alamat;
-        $d->pekerjaan = $request->pekerjaan;
-        $d->desa = $request->desa;
-        $d->kecamatan = $request->kecamatan;
-        $d->kabupaten = $request->kabupaten;
-        $d->provinsi = $request->provinsi;
-        $d->agama = $request->agama;
-        $d->golongan_darah = $request->golongan_darah;
-        $d->pendidikan = $request->golongan_darah;
-        $d->tempat_lahir = $request->tempat_lahir;
-        $d->umur = $request->umur;
-        $d->tanggal_lahir = $request->tanggal_lahir;
-        $d->save();
-
-        $e = DB::table('pasien')->get();
-
-
-        foreach($e as $data){
-            $c = new Daftar();
-            $c->id_pasien = $data->id;          
-        }
-        $c->id_poli = $request->id_poli;
-        $c->id_role_pembayaran = $request->id_role_pembayaran;
-        $c->save();
-
-        return response()->json([
-            'data' => $d.$c,
-            'success' => 'Created succesfully!'
-        ],);
     }
 
     /**
@@ -83,9 +86,40 @@ class PendaftaranController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        echo "bangsat store";
+
+        $pasien = new Pasien;
+        $pasien->nama_pasien        = $req->formData[0]["value"];
+        $pasien->jenis_kelamin      = $req->formData[1]["value"];
+        $pasien->alamat             = $req->formData[2]["value"];
+        $pasien->provinsi           = $req->formData[3]["value"];
+        $pasien->kabupaten          = $req->formData[4]["value"];
+        $pasien->kecamatan          = $req->formData[5]["value"];
+        $pasien->desa               = $req->formData[6]["value"];
+        $pasien->golongan_darah     = $req->formData[7]["value"];
+        $pasien->status             = $req->formData[8]["value"];
+        $pasien->tempat_lahir       = $req->formData[9]["value"];
+        $pasien->umur               = $req->formData[10]["value"];
+        $pasien->tanggal_lahir      = $req->formData[11]["value"];
+        $pasien->pekerjaan          = $req->formData[12]["value"];
+        $pasien->pendidikan         = $req->formData[13]["value"];
+        $pasien->agama              = $req->formData[14]["value"];
+      
+        $pasien->save();
+
+        $e = DB::table('pasien')->get();
+        foreach($e as $data){
+            $daftar = new Daftar();
+            $daftar->id_pasien = $data->id;          
+        }
+        $daftar->tanggal_kunjungan  = $req->formData[15]["value"];
+        $daftar->id_poli            = $req->formData[16]["value"];
+        $daftar->id_role_pembayaran = $req->formData[17]["value"];
+        $daftar->id_user            = $req->formData[18]["value"];
+       
+        $daftar->save();
+        return $req;
     }
 
     /**
@@ -117,9 +151,13 @@ class PendaftaranController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateData(Request $req)
     {
-        echo "bangsat update";
+        $daftar = Daftar::find($req->id);
+        $daftar->id_poli            =  $req->formData[0]["value"];
+        $daftar->id_role_pembayaran =  $req->formData[1]["value"];
+        $daftar->save();
+        return $req;
     }
 
     /**
@@ -128,10 +166,10 @@ class PendaftaranController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $req)
     {   
-        $data = Daftar::find($id);
-        $data->delete();
-        return Redirect::back();
+        if ($req->ajax()) {
+            return Daftar::destroy($req->id);
+         }
     }
 }
