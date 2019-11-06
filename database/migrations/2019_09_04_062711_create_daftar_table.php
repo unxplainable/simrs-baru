@@ -15,8 +15,10 @@ class CreateDaftarTable extends Migration
     {
         Schema::create('daftar', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->datetime('tanggal_kunjungan');
             $table->bigInteger('id_pasien')->unsigned();
             $table->bigInteger('id_poli')->unsigned();
+            $table->bigInteger('id_user')->unsigned();
             $table->bigInteger('id_role_pembayaran')->unsigned();
             $table->timestamps();
         });

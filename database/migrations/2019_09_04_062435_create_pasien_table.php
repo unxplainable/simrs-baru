@@ -22,6 +22,7 @@ class CreatePasienTable extends Migration
             $table->string('kecamatan');
             $table->string('kabupaten');
             $table->string('provinsi');
+            $table->string('status');
             $table->string('agama');
             $table->string('umur');
             $table->string('tanggal_lahir');
