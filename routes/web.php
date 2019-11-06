@@ -28,7 +28,9 @@ Route::get('/', 'Dashboard\DashboardController@index');
 
   // modul pasien
   Route::get('pasien', 'Pasien\PasienController@index');
-  Route::delete('pasien/{id}', 'Pasien\PasienController@destroy')->name('pasien.destroy');
+  Route::get('pasien-json', 'Pasien\PasienController@pasienJSON')->name('pasien.dataJSON');
+  Route::post('edit-pasien', 'Pasien\PasienController@updateData')->name('pasien.editPasien');
+  Route::get('deletePasien', 'Pasien\PasienController@destroy')->name('pasien.delete');
 
   // modul rawat inap
   Route::get('pasien-rawat-json', 'RawatInap\PasienRawatController@pasienRawatJSON')->name('pasienRawat.dataJSON');

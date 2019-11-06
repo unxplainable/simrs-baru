@@ -431,8 +431,8 @@
                 console.log('data', data)
                Swal.fire({
                   type: 'success',
-                  title: 'Ruang berhasil di ditambah!',
-                  text: 'Ruangan  anda telah berhasil ditambahkan!',
+                  title: 'Data berhasil di ditambah!',
+                  text: 'Data pendaftaran pasien anda telah berhasil ditambahkan!',
                });
                $("#addForm")[0].reset();
                $('#add-modal').modal('hide');
@@ -463,8 +463,8 @@
                 console.log(data)
                 Swal.fire({
                   type: 'success',
-                  title: 'Ruang berhasil di ubah!',
-                  text: 'Ruangan yang anda pilih telah diubah!',
+                  title: 'Data berhasil di ubah!',
+                  text: 'Data pendaftaran yang anda pilih telah diubah!',
                });
                $('#edit-modal').modal('hide');
                $('#ruang-pendaftaran').DataTable().ajax.reload();
@@ -493,8 +493,8 @@
            success: function(){          
                 Swal.fire({
                     type: 'success',
-                    title: 'Berhasil dihapus!',
-                    text: 'Pembayaran yang anda pilih telah dihapus!',
+                    title: 'Data berhasil dihapus!',
+                    text: 'Data pendaftaran yang anda pilih telah dihapus!',
                 });
                 $('#delete-modal').modal('hide');
                 $('#ruang-pendaftaran').DataTable().ajax.reload();
