@@ -45,7 +45,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label">Nama :</label>
                                 <div class="col-lg-9">
-                                        <input name="nama_ruangan" type="text" class="form-control" placeholder="nama ruangan.. ">
+                                    <input name="nama_ruangan" type="text" class="form-control" placeholder="nama ruangan.. ">
                                 </div>
                             </div>
                             <div class="form-group row">
