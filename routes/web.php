@@ -30,8 +30,10 @@ Route::get('/', 'Dashboard\DashboardController@index');
   Route::delete('pasien/{id}', 'Pasien\PasienController@destroy')->name('pasien.destroy');
 
   // modul rawat inap
+  Route::get('pasien-rawat-json', 'RawatInap\PasienRawatController@pasienRawatJSON')->name('pasienRawat.dataJSON');
   Route::get('pasien-rawat', 'RawatInap\PasienRawatController@index');
-
+  Route::get('pasien-rawat/autocomplete', 'RawatInap\PasienRawatController@autoComplete')->name('pasienRawat.autoComplete');
+  Route::get('pasien-rawat-delete', 'RawatInap\PasienRawatController@destroy')->name('pasienRawat.delete');
   Route::get('pasien-keluar', 'RawatInap\PasienKeluarController@index');
 
   Route::get('ruang', 'RawatInap\RuangController@index');

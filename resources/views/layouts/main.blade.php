@@ -15,7 +15,8 @@
   <link href="{{asset('/template/layout_1/LTR/default/full/assets/css/layout.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('/template/layout_1/LTR/default/full/assets/css/components.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('/template/layout_1/LTR/default/full/ssets/css/colors.min.css')}}" rel="stylesheet" type="text/css">
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+ 
   <!-- /global stylesheets -->
 
   <!-- Core JS files -->
@@ -40,6 +41,7 @@
 
   <script src="{{asset('/template/global_assets/js/demo_pages/datatables_basic.js')}}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
   <!-- /theme JS files -->
 
 </head>
