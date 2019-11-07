@@ -67,7 +67,10 @@ Route::get('/', 'Dashboard\DashboardController@index');
   // modul setting
   Route::get('role', 'Setting\RoleController@index');
 
-  Route::resource('user', 'Setting\UserController');
+  Route::get('user-json', 'Setting\UserController@userJson')->name('user.dataJSON');
+  Route::get('user', 'Setting\UserController@index')->name('user.index');
+  Route::post('user', 'Setting\UserController@store')->name('user.add');
+  Route::delete('user/delete', 'Setting\UserController@destroy')->name('user.delete');
 
   Route::get('edit-password', 'Setting\EditPasswordController@index');
   Route::get('edit-password/get-user', 'Setting\EditPasswordController@getUser');
