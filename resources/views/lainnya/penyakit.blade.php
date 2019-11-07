@@ -68,6 +68,7 @@
 <!--End Modal show penyakit-->
 
 <!--Modal edit penyakit -->
+@foreach($penyakit as $data)
 <div id="edit-modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -84,14 +85,14 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label">Nama Penyakit</label>
                                 <div class="col-lg-9">
-                                <input name="nama_penyakit" type="text" class="form-control" placeholder="nama penyakit ">
+                                <input name="nama_penyakit" type="text" class="form-control" placeholder="nama penyakit " value="{{$data->nama_penyakit}}" >
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label">Jenis Penyakit</label>
                                 <div class="col-lg-9">
-                                <input name="jenis_penyakit" type="text" class="form-control" placeholder="jenis penyakit ">
+                                <input name="jenis_penyakit" type="text" class="form-control" placeholder="jenis penyakit " value="{{$data->jenis_penyakit}}">
                                 </div>
                             </div>  
                         </form>
@@ -107,6 +108,7 @@
         </div>
     </div>
 </div>
+@endforeach
 <!--End Modal edit penyakit-->
 
 <!--Modal delete -->
@@ -214,7 +216,7 @@
                 Swal.fire({
                     type: 'success',
                     title: 'Berhasil dihapus!',
-                    text: 'Pembayaran yang anda pilih telah dihapus!',
+                    text: 'Penyakit yang anda pilih telah dihapus!',
                 });
                 $('#delete-modal').modal('hide');
                 $('#penyakit-tables').DataTable().ajax.reload();
