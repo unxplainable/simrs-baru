@@ -220,7 +220,7 @@
                                         <label class="col-lg-4 col-form-label">Nama User:</label>
                                         <div class="col-lg-8">
                                             <select class="form-control select" data-fouc id="id_user" name="id_user">
-                                                <option>Pilih Asuransi</option>
+                                                <option>Pilih Petugas</option>
                                                 <option value="1">Admin</option>
                                                 <option value="2">Dokter</option>
                                                 <option value="3">Perawat</option>

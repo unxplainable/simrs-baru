@@ -7,68 +7,58 @@
 @section('content')
 <div class="card">
 	<div class="card-header header-elements-inline">
-		<h5 class="card-title">Basic datatable</h5>
+		<h5 class="card-title">Tabel Transaksi Rawat Jalan</h5>
 	</div>
+
+	<div class="card-header">
+        <button type="button" class="btn bg-success btn-labeled btn-labeled-left"  data-toggle="modal" data-target="#add-modal"><b><i class="icon-reading"></i></b> Tambah Transaksi</button>
+    </div>
 
 	<table class="table datatable-basic">
 		<thead>
 			<tr>
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Job Title</th>
-				<th>DOB</th>
+				<th>No</th>
+				<th>Nama Pasien</th>
+				<th>Ruang</th>
+				<th>Tanggal Masuk</th>
+				<th>Tanggal Keluar</th>
+				<th>Total Biaya</th>
 				<th>Status</th>
+				<th>Petugas</th>
 				<th class="text-center">Actions</th>
 			</tr>
 		</thead>
-		<tbody>
-
-			<tr>
-				<td>Maxwell</td>
-				<td>Maben</td>
-				<td>Regional Representative</td>
-				<td>25 Feb 1988</td>
-				<td><span class="badge badge-danger">Suspended</span></td>
-				<td class="text-center">
-					<div class="list-icons">
-						<div class="dropdown">
-							<a href="#" class="list-icons-item" data-toggle="dropdown">
-								<i class="icon-menu9"></i>
-							</a>
-
-							<div class="dropdown-menu dropdown-menu-right">
-								<a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
-								<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
-								<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>Cicely</td>
-				<td>Sigler</td>
-				<td><a href="#">Senior Research Officer</a></td>
-				<td>15 Mar 1960</td>
-				<td><span class="badge badge-info">Pending</span></td>
-				<td class="text-center">
-					<div class="list-icons">
-						<div class="dropdown">
-							<a href="#" class="list-icons-item" data-toggle="dropdown">
-								<i class="icon-menu9"></i>
-							</a>
-
-							<div class="dropdown-menu dropdown-menu-right">
-								<a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
-								<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
-								<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
-		</tbody>
 	</table>
 </div>
 
+<!--Modal show ruangan -->
+<div id="add-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h6 class="modal-title">Form Rawat Inap</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-xl-12">
+                    <!-- Form -->
+                    <div class="card-body">
+                        <form id="addForm" name="addForm">
+                            
+                            
+                        </form>
+                        <!-- /Form -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-success add_ruangan">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal show ruangan-->
 @endsection
