@@ -7,7 +7,7 @@
 @section('content')
 <div class="card">
 	<div class="card-header header-elements-inline">
-		<h5 class="card-title">Basic datatable</h5>
+		<h5 class="card-title">Data Tabel Obat</h5>
 	</div>
 
 	<div class="card-header header-elements-inline">
@@ -28,7 +28,7 @@
 	</table>
 </div>
 
-<!--Modal show obat -->
+<!--Modal add obat -->
 <div id="add-modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -67,10 +67,12 @@
                               <label class="col-lg-3 col-form-label">Jenis Obat</label>
                               <div class="col-lg-6">
                                   <select name="jenis_obat" class="form-control">
-                                      <option>Tablet</option>
-                                      <option>Sirup</option>
-									  <option>Kapsul</option>
-									  <option>Bubuk</option>
+
+                                      <option value="Tablet">Tablet</option>
+                                      <option value="Sirip">Sirup</option>
+									  <option value="Kapsul">Kapsul</option>
+									  <option value="Bubuk">Bubuk</option>
+
                                   </select>
                                 </div>
                             </div>
@@ -87,7 +89,69 @@
         </div>
     </div>
 </div>
-<!--End Modal show ruangan-->
+<!--End Modal add obat-->
+
+
+<!--Modal edit obat -->
+<div id="edit-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h6 class="modal-title">Form Obat</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-xl-12">
+                    <!-- Form -->
+                    <div class="card-body">
+                        <form id="editForm" name="editForm">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Nama Obat : </label>
+                                <div class="col-lg-9">
+                                    <input name="nama_obat" type="text" class="form-control" placeholder="Nama Obat ">
+                                </div>
+                            </div>
+
+							<div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Dosis Obat : </label>
+                                <div class="col-lg-9">
+                                    <input name="dosis_obat" type="text" class="form-control" placeholder="Dosis Obat ">
+                                </div>
+                            </div>
+							<div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Harga Obat : </label>
+                                <div class="col-lg-9">
+                                    <input name="harga_obat" type="text" class="form-control" placeholder="Harga Obat ">
+                                </div>
+                            </div>
+                            
+
+                            <div class="form-group row">
+                              <label class="col-lg-3 col-form-label">Jenis Obat</label>
+                              <div class="col-lg-6">
+                                  <select name="jenis_obat" class="form-control">
+                                      <option value="Tablet">Tablet</option>
+                                      <option value="Sirup">Sirup</option>
+									  <option value="Kapsul">Kapsul</option>
+									  <option value="Bubuk">Bubuk</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /Form -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-success edit_obat">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal edit obat-->
 
 <!--Modal edit obat -->
 @foreach($obat as $data)
@@ -196,7 +260,7 @@
 			success: function(data){
                Swal.fire({
                   type: 'success',
-                  title: 'Obat berhasil di ditambah!',
+                  title: 'Obat berhasil ditambah!',
                   text: 'Obat telah berhasil ditambahkan!',
                });
                $("#addForm")[0].reset();
@@ -237,6 +301,7 @@
         
       });
 
+
       //delete obat
       $(document).on('click', '.delete-obat-data', function(){
        var id = $(this).attr("id");
@@ -264,7 +329,6 @@
         });
        
     });
-
 
 	//GET ALL DATA
 	$(function(){

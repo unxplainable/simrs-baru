@@ -24,7 +24,7 @@
 			</tr>
 		</thead>
 	</table>
-</div>
+</div>  
 	<!--Modal show penyakit -->
 <div id="add-modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -258,6 +258,6 @@
          
 
 
-    </script>
-    @endpush
+</script>
+@endpush
 

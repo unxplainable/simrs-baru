@@ -138,8 +138,8 @@ class ObatController extends Controller
      */
     public function destroy(Request $request)
     {
-        if ($request->ajax()) {
-            return Obat::destroy($request->id);
+        if ($req->ajax()) {
+            return Obat::destroy($req-> id);
          }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Setting;
 
 use App\User;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\FunctionHelper;
@@ -20,6 +21,31 @@ class EditPasswordController extends Controller
         $users = User::with('role')->orderBy('nama_user', 'asc')->get();
         
         return view('setting.editpassword', ['users' => $users, 'menus' => $menus]);
+    }
+
+    public function passwordJson()
+    {
+        $users = User::with('role')->orderBy('nama_user', 'asc')->get();
+
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = [
+                'id' => $user->id,
+                'nama_user' => $user->nama_user,
+                'email' => $user->email,
+                'role_user' => $user->role->nama_role
+            ];
+        }
+
+        return Datatables::of($data)
+        ->addColumn('action', function ($data){
+            return'
+                <button type="button" id="'.$data['id'].'" class="btn btn-primary btn-labeled btn-labeled-left btn-sm edit-modal" data-toggle="modal" data-target="#edit-modal"><b><i class="icon-pencil5"></i></b> Change Password</button>
+            ';
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()
+        ->make(true);
     }
 
     /**
