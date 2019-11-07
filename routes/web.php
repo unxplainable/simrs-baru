@@ -84,11 +84,11 @@ Route::get('/', 'Dashboard\DashboardController@index');
   Route::get('user-json', 'Setting\UserController@userJson')->name('user.dataJSON');
   Route::get('user', 'Setting\UserController@index')->name('user.index');
   Route::post('user', 'Setting\UserController@store')->name('user.add');
+  Route::post('user/{id}', 'Setting\UserController@update')->name('user.edit');
   Route::delete('user/delete', 'Setting\UserController@destroy')->name('user.delete');
 
+  Route::get('edit-password-json', 'Setting\EditPasswordController@passwordJson')->name('password.dataJSON');
   Route::get('edit-password', 'Setting\EditPasswordController@index');
-  Route::get('edit-password/get-user', 'Setting\EditPasswordController@getUser');
-  Route::post('edit-password/{id}', 'Setting\EditPasswordController@editPassword');
 
   Route::get('profile', 'Setting\ProfileController@index');
 });

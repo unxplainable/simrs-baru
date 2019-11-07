@@ -74,44 +74,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->input(), array(
-        //     'nama_user' => 'required',
-        //     'email' => 'required|email|unique:users,email',
-        //     'role_id' => 'required',
-        //     'password' => [
-        //         'required',
-        //         'string',
-        //         'min:8',             // must be at least 10 characters in length
-        //         'regex:/[a-z]/',      // must contain at least one lowercase letter
-        //         'regex:/[A-Z]/',      // must contain at least one uppercase letter
-        //         'regex:/[0-9]/',      // must contain at least one digit
-        //         'regex:/[@$!%*#?&]/', // must contain a special character
-        //     ],
-        //     'confirmpassword' => 'required|same:password',
-        // ));
-
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'error'    => true,
-        //         'messages' => $validator->errors(),
-        //     ], 422);
-        // }
-
-        // if (!strcmp($request->password, $request->confirmpassword) == 0) {
-        //     $msg = ['password is not same as confirm password'];
-        //     return response()->json([
-        //         'error' => true,
-        //         'messages' => $msg,
-        //     ], 422);
-        // }
-
-        // $user = new User();
-        // $user->nama_user = $request->nama_user;
-        // $user->email = $request->email;
-        // $user->id_role = $request->role_id;
-        // $user->password = bcrypt($request->confirmpassword);
-        // $user->save();
-
         $user = new User();
         $user->nama_user = $request->formData[0]["value"];
         $user->email = $request->formData[1]["value"];
@@ -173,34 +135,6 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
-        $validator = Validator::make($request->input(), array(
-            'nama_user' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'role_id' => 'required',
-        ));
-
-        if ($validator->fails()) {
-            return response()->json([
-                'error'    => true,
-                'messages' => $validator->errors(),
-            ], 422);
-        }
-
-        if ($request->email == $user->email) {
-            $user->nama_user = $request->nama_user;
-            $user->id_role = $request->role_id;
-        } else {
-            $user->nama_user = $request->nama_user;
-            $user->email = $request->email;
-            $user->id_role = $request->role_id;
-            if ($validator->fails()) {
-                return response()->json([
-                    'error'    => true,
-                    'messages' => $validator->errors(),
-                ], 422);
-            }
-        }
         $user->save();
 
         return response()->json([

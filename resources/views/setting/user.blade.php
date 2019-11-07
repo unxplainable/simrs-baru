@@ -110,7 +110,7 @@
 <!--End Modal Create User-->
 
 <!--Modal Edit User -->
-<div id="modal_theme_primary" class="modal fade" tabindex="-1">
+<div id="edit-modal" class="modal fade" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header bg-primary">
@@ -119,7 +119,7 @@
 			</div>
 
 			<div class="card-body">
-				<form id="editForm">
+				<form id="form-edit">
 					<div class="modal-body">
 						<div class="alert alert-danger" id="edit-error-bag" hidden>
 							<ul id="edit-user-errors">
@@ -164,7 +164,7 @@
 					<div class="modal-footer">
 						<input id="user_id" name="user_id" type="hidden">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button id="btn-edit-user" type="submit" class="btn bg-primary">Save Changes</button>
+						<button id="btn-edit-user" type="submit" class="btn bg-primary edit-data">Save Changes</button>
 					</div>
 				</form>
 			</div>  
@@ -224,54 +224,6 @@ $(document).on('click', '.add-data', function(e){
 			$('#tabel-user').DataTable().ajax.reload();
 		}
 	});
-});
-
-// delete ruangan
-$(document).on('click', '.edit-modal', function(){
-	$.ajax({
-		type: 'GET',
-		url: '/user/' + user_id + '/edit',
-		success: function(data) {
-			$('#editForm #nama_user').val(data.user.nama_user);
-			$('#editForm #email').val(data.user.email);
-			$('#editForm #role_id').val(data.user.id_role);
-			$('#editForm #user_id').val(data.user.id);
-			$('#role_user').find('option[value='+data.user.id_role+']').prop('selected', true);
-			$('#edit-modal').modal('show');
-			$('#role_user').on('change', function(){
-				var role = $(this).val();
-				$('#editForm #role_id').val(role);
-			});
-		},
-		error : function(data){
-			console.log(data);
-		}
-	})
-});
-
-$(document).on('click', '.edit-data', function(e){
-	e.preventDefault();
-		var id = $(this).attr("id");
-	
-		$.ajax({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
-		},
-		url: "{{ route('ruang.editRuang') }}",
-		method: "post",
-		data: {id: id, formData: JSON.parse(JSON.stringify($('#editForm').serializeArray())) },
-		success: function(data){
-			console.log(data)
-			Swal.fire({
-				type: 'success',
-				title: 'Ruang berhasil di ubah!',
-				text: 'Ruangan yang anda pilih telah diubah!',
-			});
-			$('#edit-modal').modal('hide');
-			$('#tabel-user').DataTable().ajax.reload();
-		}
-	});
-
 });
 
 // delete ruangan
