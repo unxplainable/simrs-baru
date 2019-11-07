@@ -59,11 +59,20 @@ Route::get('/', 'Dashboard\DashboardController@index');
 
   // modul lainnya
   Route::get('penyakit', 'Lainnya\PenyakitController@index');
+  Route::post('add-penyakit', 'Lainnya\PenyakitController@store')->name('penyakit.addPenyakit');
+  Route::get('penyakit-json', 'Lainnya\PenyakitController@penyakitJSON')->name('penyakit.dataJSON');
+  Route::get('deletePenyakit', 'Lainnya\PenyakitController@destroy')->name('penyakit.delete');
+  Route::post('edit-penyakit', 'Lainnya\PenyakitController@update')->name('penyakit.editPenyakit');
 
-  Route::post('penyakit', 'Lainnya\PenyakitController@store');
+  // Route::get('penyakit', 'Lainnya\PenyakitController@index');
+
+  // Route::post('penyakit', 'Lainnya\PenyakitController@store');
 
   Route::get('obat', 'Lainnya\ObatController@index');
-  Route::post('obat', 'Lainnya\ObatController@store');
+  Route::post('add-obat', 'Lainnya\ObatController@store')->name('obat.addObat');
+  Route::get('obat-json', 'Lainnya\ObatController@obatJSON')->name('obat.dataJSON');
+  Route::get('deleteObat', 'Lainnya\ObatController@destroy')->name('obat.delete');
+  Route::post('edit-obat', 'Lainnya\ObatController@update')->name('obat.editObat');
   
   
 
