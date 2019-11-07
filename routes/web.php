@@ -51,11 +51,16 @@ Route::get('/', 'Dashboard\DashboardController@index');
   Route::get('rawat-jalan/pasien', 'RawatJalan\PasienController@index');
   Route::get('rawat-jalan/pasien-search', 'RawatJalan\PasienController@pasienSearch')->name('rawatJalan.pasienSearch');
   Route::get('rawat-jalan/data-json', 'RawatJalan\PasienController@dataJSON')->name('rawatJalan.dataJSON');
+  Route::post('rawat-jalan/add-data', 'RawatJalan\PasienController@store')->name('rawatJalan.addData');
   Route::post('rawat-jalan/edit-data', 'RawatJalan\PasienController@UpdateData')->name('rawatJalan.editData');
   Route::get('rawat-jalan/delete', 'RawatJalan\PasienController@destroy')->name('rawatJalan.delete');
 
+  // tindakan 
   Route::get('rawat-jalan/tindakan', 'RawatJalan\TindakanController@index');
-
+  Route::get('rawat-jalan/tindakan-json', 'RawatJalan\TindakanController@dataJSON')->name('tindakan.dataJSON');
+  Route::get('rawat-jalan/tindakan/delete', 'RawatJalan\TindakanController@destroy')->name('tindakan.delete');
+  Route::post('rawat-jalan/tindakan/edit', 'RawatJalan\TindakanController@updateData')->name('tindakan.editData');
+  Route::post('rawat-jalan/tindakan/add', 'RawatJalan\TindakanController@store')->name('tindakan.addData');
   // modul keuangan
   Route::get('transaksi-inap', 'Keuangan\TransaksiInapController@index');
 

@@ -17,8 +17,8 @@ class CreateRawatJalanTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('id_pasien')->unsigned();
             $table->bigInteger('id_user')->unsigned();
-            $table->dateTime('tanggal_keluar');
-            $table->dateTime('tanggal_masuk');
+            $table->dateTime('tanggal_keluar')->nullable();
+            $table->dateTime('tanggal_masuk')->nullable();
             $table->bigInteger('id_pemeriksaan')->unsigned();
             $table->timestamps();
         });
