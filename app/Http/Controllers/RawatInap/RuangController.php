@@ -124,8 +124,6 @@ class RuangController extends Controller
         $ruang->id_kelas =  $req->formData[0]["value"];
         $ruang->status_ruang =  $req->formData[1]["value"];
         $ruang->save();
-        
-   
     }
 
     /**

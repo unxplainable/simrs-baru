@@ -17,7 +17,7 @@ class CreateResepTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('id_obat')->unsigned();
             $table->string('nama_resep');
-            $table->string('jumlah_obat');
+            $table->string('jumlah_resep');
             $table->timestamps();
         });
     }

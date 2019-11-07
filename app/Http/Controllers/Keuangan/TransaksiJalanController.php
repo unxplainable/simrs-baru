@@ -9,6 +9,8 @@ use App\Pemeriksaan;
 use App\RawatJalan;
 use App\Ruang;
 use App\User;
+use App\TransaksiPoli;
+use Yajra\Datatables\Datatables;
 use App\Helpers\FunctionHelper;
 class TransaksiJalanController extends Controller
 {
@@ -17,6 +19,43 @@ class TransaksiJalanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function transaksiJSON() {
+        $transaksijalan = DB::table('transaksi_poli')
+                        ->join('pemeriksaan','transaksi_poli.id_pemeriksaan','=','pemeriksaan.id')
+                        ->join('users','transaksi_poli.id_petugas', '=', 'users.id')
+                        ->join('pasien','pemeriksaan.id_pasien','=','pasien.id')
+                        ->join('poli','pemeriksaan.id_poli','=','poli.id')
+                        ->join('tindakan','pemeriksaan.id_tindakan','=','tindakan.id')
+                        ->join('resep','pemeriksaan.id_resep', '=', 'resep.id')
+                        ->select('transaksi_poli.id as id_transaksi_poli','transaksi_poli.*','pasien.*','pemeriksaan.*','users.*','tindakan.*','poli.*','resep.*')
+                        ->get(); 
+        $data = [];
+        foreach($transaksijalan as $transaksi) {
+            $data[] = [
+                'id' => $transaksi->id_transaksi_poli,
+                'nama_pasien' => $transaksi->nama_pasien,
+                'nama_tindakan' => $transaksi->nama_tindakan,
+                'nama_resep' => $transaksi->nama_resep,
+                'total_pembayaran'=> $transaksi ->total_pembayaran,
+                'status_pembayaran' => $transaksi->status_pembayaran,
+                'nama_user' => $transaksi->nama_user,
+            ];
+        }
+        return Datatables::of($data)
+        ->addColumn('action', function ($data){
+            return'
+                <div class="list-icons">
+                    <a href="#" id="'.$data['id'].'" class="dropdown-item edit-transaksi-jalan" data-toggle="modal" data-target="#edit-modal"><button type="button" class="btn btn-primary"> <i class="icon-pencil5 mr-2"></i> Edit </button></a>
+                    <a href="#" id="'.$data['id'].'" class="dropdown-item delete-modal" data-toggle="modal" data-target="#delete-modal"><button type="button" class="btn btn-danger"> <i class="icon-trash mr-2"></i> Delete </button></i></a>
+                </div>
+            ';
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()
+        ->make(true);
+    }
+
     public function index()
     {
         $menus = FunctionHelper::callMenu();
@@ -81,9 +120,12 @@ class TransaksiJalanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateData(Request $req)
     {
-        //
+        $transaksi = TransaksiPoli::find($req->id);
+        $transaksi->status_pembayaran =  $req->formData[1]["value"];
+        $transaksi->save();
+        return $req;
     }
 
     /**

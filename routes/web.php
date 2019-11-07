@@ -28,7 +28,9 @@ Route::get('/', 'Dashboard\DashboardController@index');
 
   // modul pasien
   Route::get('pasien', 'Pasien\PasienController@index');
-  Route::delete('pasien/{id}', 'Pasien\PasienController@destroy')->name('pasien.destroy');
+  Route::get('pasien-json', 'Pasien\PasienController@pasienJSON')->name('pasien.dataJSON');
+  Route::post('edit-pasien', 'Pasien\PasienController@updateData')->name('pasien.editPasien');
+  Route::get('deletePasien', 'Pasien\PasienController@destroy')->name('pasien.delete');
 
   // modul rawat inap
   Route::get('pasien-rawat-json', 'RawatInap\PasienRawatController@pasienRawatJSON')->name('pasienRawat.dataJSON');
@@ -58,27 +60,45 @@ Route::get('/', 'Dashboard\DashboardController@index');
   Route::get('transaksi-inap', 'Keuangan\TransaksiInapController@index');
 
   Route::get('transaksi-jalan', 'Keuangan\TransaksiJalanController@index');
-
+  Route::get('transaksi-jalan-json', 'Keuangan\TransaksiJalanController@transaksiJSON')->name('transaksijalan.dataJSON');
+  Route::post('edit-transaksi-jalan', 'Keuangan\TransaksiJalanController@updateData')->name('keuangan.editTransaksiJalan');
   // modul lainnya
   Route::get('penyakit', 'Lainnya\PenyakitController@index');
+  Route::post('add-penyakit', 'Lainnya\PenyakitController@store')->name('penyakit.addPenyakit');
+  Route::get('penyakit-json', 'Lainnya\PenyakitController@penyakitJSON')->name('penyakit.dataJSON');
+  Route::get('deletePenyakit', 'Lainnya\PenyakitController@destroy')->name('penyakit.delete');
+  Route::post('edit-penyakit', 'Lainnya\PenyakitController@update')->name('penyakit.editPenyakit');
 
-  Route::post('penyakit', 'Lainnya\PenyakitController@store');
+  // Route::get('penyakit', 'Lainnya\PenyakitController@index');
+
+  // Route::post('penyakit', 'Lainnya\PenyakitController@store');
 
   Route::get('obat', 'Lainnya\ObatController@index');
-  Route::post('obat', 'Lainnya\ObatController@store');
+  Route::post('add-obat', 'Lainnya\ObatController@store')->name('obat.addObat');
+  Route::get('obat-json', 'Lainnya\ObatController@obatJSON')->name('obat.dataJSON');
+  Route::get('deleteObat', 'Lainnya\ObatController@destroy')->name('obat.delete');
+  Route::post('edit-obat', 'Lainnya\ObatController@update')->name('obat.editObat');
   
   
 
   Route::get('resep', 'Lainnya\ResepController@index');
+  Route::post('add-resep', 'Lainnya\ResepController@store')->name('resep.addResep');
+  Route::get('resep-json', 'Lainnya\ResepController@resepJSON')->name('resep.dataJSON');
+  Route::get('deleteResep', 'Lainnya\ResepController@destroy')->name('resep.delete');
+  Route::post('edit-resep', 'Lainnya\ResepController@update')->name('resep.editResep');
+  
 
   // modul setting
   Route::get('role', 'Setting\RoleController@index');
 
-  Route::resource('user', 'Setting\UserController');
+  Route::get('user-json', 'Setting\UserController@userJson')->name('user.dataJSON');
+  Route::get('user', 'Setting\UserController@index')->name('user.index');
+  Route::post('user', 'Setting\UserController@store')->name('user.add');
+  Route::post('user/{id}', 'Setting\UserController@update')->name('user.edit');
+  Route::delete('user/delete', 'Setting\UserController@destroy')->name('user.delete');
 
+  Route::get('edit-password-json', 'Setting\EditPasswordController@passwordJson')->name('password.dataJSON');
   Route::get('edit-password', 'Setting\EditPasswordController@index');
-  Route::get('edit-password/get-user', 'Setting\EditPasswordController@getUser');
-  Route::post('edit-password/{id}', 'Setting\EditPasswordController@editPassword');
 
   Route::get('profile', 'Setting\ProfileController@index');
 });
