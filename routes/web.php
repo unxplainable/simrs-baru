@@ -78,6 +78,11 @@ Route::get('/', 'Dashboard\DashboardController@index');
   
 
   Route::get('resep', 'Lainnya\ResepController@index');
+  Route::post('add-resep', 'Lainnya\ResepController@store')->name('resep.addResep');
+  Route::get('resep-json', 'Lainnya\ResepController@resepJSON')->name('resep.dataJSON');
+  Route::get('deleteResep', 'Lainnya\ResepController@destroy')->name('resep.delete');
+  Route::post('edit-resep', 'Lainnya\ResepController@update')->name('resep.editResep');
+  
 
   // modul setting
   Route::get('role', 'Setting\RoleController@index');
