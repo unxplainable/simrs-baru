@@ -136,10 +136,10 @@ class ObatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $req)
     {
-        if ($request->ajax()) {
-            return Obat::destroy($request->id);
+        if ($req->ajax()) {
+            return Obat::destroy($req-> id);
          }
     }
 }
