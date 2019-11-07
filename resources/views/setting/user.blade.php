@@ -66,8 +66,7 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<label>Role</label>
-									<input class="form-control" id="role_id" name="role_id" type="hidden">
-									<select id="select-user-role-create" class="form-control form-control-select" name="user-role">
+									<select id="role_user" class="form-control form-control-select" name="user-role">
 										<option>-- Pilih Role User --</option>
 										@foreach ($roles as $role)
 											<option value="{{ $role->id }}">
@@ -110,55 +109,70 @@
 </div>
 <!--End Modal Create User-->
 
-<!--Modal edit ruangan -->
-<div id="edit-modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal-lg">
+<!--Modal Edit User -->
+<div id="modal_theme_primary" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header bg-primary">
-				<h6 class="modal-title">Form Rawat Inap</h6>
+				<h6 class="modal-title">Edit User<p id="nama-user"></p></h6>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 
-			<div class="modal-body">
-				<div class="col-xl-12">
-					<!-- Form -->
-					<div class="card-body">
-						<form id="editForm" name="editForm">
-							<div class="form-group row">
-								<label class="col-lg-3 col-form-label">Kelas:</label>
-								<div class="col-lg-9">
-									<select name="id_kelas" class="form-control">
-										{{-- @foreach ($kelas as $data)
-										<option value="{{$data->id_kelas}}">{{$data->nama_kelas}}</option>
-										@endforeach --}}
-				
-									</select>
-								</div>
-							</div>
+			<div class="card-body">
+				<form id="editForm">
+					<div class="modal-body">
+						<div class="alert alert-danger" id="edit-error-bag" hidden>
+							<ul id="edit-user-errors">
+							</ul>
+						</div>
 
-							<div class="form-group row">
-								<label class="col-lg-3 col-form-label">Status</label>
-								<div class="col-lg-6">
-									<select name="status" class="form-control">
-										<option value="1">Penuh</option>
-										<option value="0">Kosong</option>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<label>Nama</label>
+									<input type="text" id="nama_user" name="nama_user" placeholder="Nama" class="form-control">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<label>Email</label>
+									<input type="text" id="email" name="email" placeholder="Email" class="form-control">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<label>Role</label>
+									<select id="role_user" class="form-control form-control-select" name="user-role">
+										<option value="">-- Pilih Role User --</option>
+										@foreach ($roles as $role)
+											<option value="{{ $role->id }}">
+												{{ $role->nama_role }}
+											</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
-						</form>
-						<!-- /Form -->
+						</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="modal-footer">
-				<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-				<button type="button" class="btn bg-success edit_ruangan">Save changes</button>
-			</div>
+					<div class="modal-footer">
+						<input id="user_id" name="user_id" type="hidden">
+						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+						<button id="btn-edit-user" type="submit" class="btn bg-primary">Save Changes</button>
+					</div>
+				</form>
+			</div>  
 		</div>
+		<!-- /2 columns form -->
 	</div>
 </div>
-<!--End Modal edit ruangan-->
+<!--End Modal Edit User-->
 
 <!--Modal delete -->
 <div id="delete-modal" class="modal fade" tabindex="-2">
@@ -196,10 +210,6 @@ $(document).on('click', '.add-data', function(e){
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
 		},
-		$('#select-user-role-create').on('change', function(){
-			var role = $(this).val();
-			$('#addForm #role_id').val(role);
-		});
 		url: "{{ route('user.add') }}",
 		method: "POST",
 		data: {formData: JSON.parse(JSON.stringify($('#addForm').serializeArray())) },
@@ -216,7 +226,30 @@ $(document).on('click', '.add-data', function(e){
 	});
 });
 
-$(document).on('click', '.edit_ruangan', function(e){
+// delete ruangan
+$(document).on('click', '.edit-modal', function(){
+	$.ajax({
+		type: 'GET',
+		url: '/user/' + user_id + '/edit',
+		success: function(data) {
+			$('#editForm #nama_user').val(data.user.nama_user);
+			$('#editForm #email').val(data.user.email);
+			$('#editForm #role_id').val(data.user.id_role);
+			$('#editForm #user_id').val(data.user.id);
+			$('#role_user').find('option[value='+data.user.id_role+']').prop('selected', true);
+			$('#edit-modal').modal('show');
+			$('#role_user').on('change', function(){
+				var role = $(this).val();
+				$('#editForm #role_id').val(role);
+			});
+		},
+		error : function(data){
+			console.log(data);
+		}
+	})
+});
+
+$(document).on('click', '.edit-data', function(e){
 	e.preventDefault();
 		var id = $(this).attr("id");
 	
@@ -235,11 +268,12 @@ $(document).on('click', '.edit_ruangan', function(e){
 				text: 'Ruangan yang anda pilih telah diubah!',
 			});
 			$('#edit-modal').modal('hide');
-			$('#ruang-tables').DataTable().ajax.reload();
+			$('#tabel-user').DataTable().ajax.reload();
 		}
 	});
 
 });
+
 // delete ruangan
 $(document).on('click', '.delete-modal', function(){
 	var id = $(this).attr("id");
