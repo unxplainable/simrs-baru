@@ -13,12 +13,14 @@ class ResepTableSeeder extends Seeder
     {
         DB::table('resep')->insert([
             'id_obat' => 1,
-            'jumlah_resep' => 1,
+            'nama_resep' => 'resep sakit kepala',
+            'jumlah_obat' => 1,
         ]);
 
         DB::table('resep')->insert([
             'id_obat' => 2,
-            'jumlah_resep' => 2,
+            'nama_resep' => 'resep batuk',
+            'jumlah_obat' => 2,
         ]);
     }
 }

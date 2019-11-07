@@ -16,7 +16,8 @@ class CreateResepTable extends Migration
         Schema::create('resep', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('id_obat')->unsigned();
-            $table->string('jumlah_resep');
+            $table->string('nama_resep');
+            $table->string('jumlah_obat');
             $table->timestamps();
         });
     }

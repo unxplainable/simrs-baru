@@ -7,7 +7,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Pemeriksaan;
 use App\RawatJalan;
+use App\User;
+use App\Poli;
+use App\Resep;
+use App\Obat;
+use App\Pasien;
 use App\Helpers\FunctionHelper;
+use App\Helpers\AutoCompleteHelper;
+use Yajra\Datatables\Datatables;
 class PasienController extends Controller
 {
     /**
@@ -15,6 +22,53 @@ class PasienController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function dataJSON() {
+        $rawatjalan = DB::table('rawat_jalan')
+                        ->join('pasien','rawat_jalan.id_pasien','=','pasien.id')
+                        ->join('users','rawat_jalan.id_user', '=', 'users.id')
+                        ->join('pemeriksaan','rawat_jalan.id_pemeriksaan','=','pemeriksaan.id')
+                        ->join('poli','pemeriksaan.id_poli','=','poli.id')
+                        ->join('tindakan','pemeriksaan.id_tindakan','=','tindakan.id')
+                        ->join('resep','pemeriksaan.id_resep','=','resep.id')
+                        ->select('pasien.*','pemeriksaan.*','pemeriksaan.id as id_pemeriksaan','users.*','rawat_jalan.*','rawat_jalan.id as id_rawat_jalan','poli.*','tindakan.*','resep.*')
+                        ->get();   
+        
+                        $data = [];
+        foreach($rawatjalan as $pasien) {
+            $data[] = [
+                'id' => $pasien->id_rawat_jalan,
+                'id_pemeriksaan'=>$pasien->id_pemeriksaan,
+                'nama_pasien' => $pasien->nama_pasien,
+                'poli' => $pasien->nama_poli,
+                'petugas' => $pasien->nama_user,
+                'pemeriksaan' =>$pasien->nama_tindakan,
+                'resep' => $pasien->id_obat,
+                'tanggal_pemeriksaan' =>$pasien->tanggal_masuk
+            ];
+        }
+        return Datatables::of($data)
+        ->addColumn('action', function ($data){
+            return'
+                <div class="list-icons">
+                    <div class="dropdown">
+                        <a href="#" class="list-icons-item" data-toggle="dropdown">
+                            <i class="icon-menu9"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" id="'.$data['id'].'" data-idpemeriksaan="'.$data['id_pemeriksaan'].'" class="dropdown-item edit-modal" data-toggle="modal" data-target="#edit-modal'.$data['id'].'"><i class="icon-file-excel"></i>Edit</a>
+                            <a href="#" id="'.$data['id'].'" class="dropdown-item delete-modal" data-toggle="modal" data-target="#delete-modal"><i class="icon-file-word"></i>Delete</a>
+                        </div>
+                    </div>
+                </div>
+            ';
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()
+        ->make(true);
+    }
+
     public function index()
     {
         $menus = FunctionHelper::callMenu();
@@ -25,74 +79,50 @@ class PasienController extends Controller
                         ->join('poli','pemeriksaan.id_poli','=','poli.id')
                         ->join('tindakan','pemeriksaan.id_tindakan','=','tindakan.id')
                         ->join('resep','pemeriksaan.id_resep','=','resep.id')
-                        ->select('pasien.*','pemeriksaan.*','users.*','rawat_jalan.*','poli.*','tindakan.*','resep.*')
-                        ->get();   
-        return view('rawatjalan.pasien',['rawatjalan' => $rawatjalan, 'menus' => $menus]);
+                        ->select('pasien.*','pemeriksaan.*','users.*','rawat_jalan.*','rawat_jalan.id as id_rawat_jalan','rawat_jalan.id_user as id_petugas','poli.*','poli.id as id_poli','tindakan.*','resep.*')
+                        ->get(); 
+                        
+        $poli = Poli::all();
+        $user = User::all();
+        $pemeriksaan = Pemeriksaan::with('tindakan')->get();
+        $reseps = Resep::with('obat')->get();
+
+        return view('rawatjalan.pasien',[
+                                            'rawatjalan' => $rawatjalan,
+                                            'users' => $user,
+                                            'menus' => $menus,
+                                            'poli'  => $poli,
+                                            'pemeriksaan' => $pemeriksaan,
+                                            'reseps' => $reseps,
+                                            
+                                        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function destroy(Request $req)
     {
-        //
+        if ($req->ajax()) {
+            return RawatJalan::destroy($req->id);
+         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function pasienSearch(Request $req) {
+
+        return AutoCompleteHelper::Pasien(request());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function updateData(Request $req)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $rawatJalan = RawatJalan::find($req->id);
+        $rawatJalan->id_pasien =  $req->formData[0]["value"];
+        $rawatJalan->id_user =  $req->formData[3]["value"];
+        $rawatJalan->save();
+        $pemeriksaan = Pemeriksaan::find($req->id_pemeriksaan);
+        $pemeriksaan->id_poli = $req->formData[2]["value"];
+        $pemeriksaan->id_tindakan = $req->formData[4]["value"];
+        $pemeriksaan->id_resep = $req->formData[5]["value"];
+        $pemeriksaan->save;
+        
+        return $req;
+   
     }
 }
