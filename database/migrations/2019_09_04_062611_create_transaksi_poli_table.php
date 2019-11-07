@@ -17,6 +17,7 @@ class CreateTransaksiPoliTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('id_petugas')->unsigned();
             $table->bigInteger('id_pemeriksaan')->unsigned();
+            $table->string('status_pembayaran')->default('0');
             $table->string('total_pembayaran');
             $table->timestamps();
         });

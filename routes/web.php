@@ -56,7 +56,8 @@ Route::get('/', 'Dashboard\DashboardController@index');
   Route::get('transaksi-inap', 'Keuangan\TransaksiInapController@index');
 
   Route::get('transaksi-jalan', 'Keuangan\TransaksiJalanController@index');
-
+  Route::get('transaksi-jalan-json', 'Keuangan\TransaksiJalanController@transaksiJSON')->name('transaksijalan.dataJSON');
+  Route::post('edit-transaksi-jalan', 'Keuangan\TransaksiJalanController@updateData')->name('keuangan.editTransaksiJalan');
   // modul lainnya
   Route::get('penyakit', 'Lainnya\PenyakitController@index');
   Route::post('add-penyakit', 'Lainnya\PenyakitController@store')->name('penyakit.addPenyakit');
