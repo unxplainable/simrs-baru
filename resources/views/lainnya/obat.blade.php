@@ -67,10 +67,10 @@
                               <label class="col-lg-3 col-form-label">Jenis Obat</label>
                               <div class="col-lg-6">
                                   <select name="jenis_obat" class="form-control">
-                                      <option value="0">Tablet</option>
-                                      <option value="1">Sirup</option>
-									  <option value="2">Kapsul</option>
-									  <option value="0">Bubuk</option>
+                                      <option>Tablet</option>
+                                      <option>Sirup</option>
+									  <option>Kapsul</option>
+									  <option>Bubuk</option>
                                   </select>
                                 </div>
                             </div>
@@ -88,6 +88,69 @@
     </div>
 </div>
 <!--End Modal show ruangan-->
+
+<!--Modal edit obat -->
+@foreach($obat as $data)
+<div id="edit-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h6 class="modal-title">Form Obat</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-xl-12">
+                    <!-- Form -->
+                    <div class="card-body">
+                        <form id="editForm" name="editForm">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Nama Obat</label>
+                                <div class="col-lg-9">
+                                <input name="nama_obat" type="text" class="form-control" placeholder="nama obat " value="{{$data->nama_obat}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Dosis Obat</label>
+                                <div class="col-lg-9">
+                                <input name="dosis_obat" type="text" class="form-control" placeholder="dosis obat " value="{{$data->dosis_obat}}">
+                                </div>
+                            </div> 
+
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Harga Obat</label>
+                                <div class="col-lg-9">
+                                <input name="harga_obat" type="text" class="form-control" placeholder="harga obat " value="{{$data->harga_obat}}">
+                                </div>
+                            </div> 
+
+                            <div class="form-group row">
+                              <label class="col-lg-3 col-form-label">Jenis Obat</label>
+                              <div class="col-lg-6">
+                                  <select name="jenis_obat" class="form-control" value="{{$data->jenis_obat}}">
+                                      <option value="0">Tablet</option>
+                                      <option value="1">Sirup</option>
+                                      <option value="2">Kapsul</option>
+                                      <option value="3">Bubuk</option>
+                                  </select>
+                                </div>
+                            </div> 
+                        </form>
+                        <!-- /Form -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-success edit_obat">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+<!--End Modal edit obat-->
 
 <!--Modal delete -->
 <div id="delete-modal" class="modal fade" tabindex="-2">
@@ -127,7 +190,7 @@
 			headers: {
                'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
             },
-			rl: "{{ route('obat.addObat') }}",
+			url: "{{ route('obat.addObat') }}",
             method: "post",
 			data: {formData: JSON.parse(JSON.stringify($('#addForm').serializeArray())) },
 			success: function(data){
@@ -142,6 +205,66 @@
             }
          });
 	});
+
+    //edit obat
+    $(document).on('click', '.edit-obat-data', function(){
+         var id = $(this).attr("id");
+         $('.edit_obat').attr("id", id);
+    });
+
+    $(document).on('click', '.edit_obat', function(e){
+        e.preventDefault();
+         var id = $(this).attr("id");
+        
+         $.ajax({
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+            },
+            url: "{{ route('obat.editObat') }}",
+            method: "post",
+            data: {id: id, formData: JSON.parse(JSON.stringify($('#editForm').serializeArray())) },
+            success: function(data){
+                console.log(data)
+               Swal.fire({
+                  type: 'success',
+                  title: 'Obat berhasil di ubah!',
+                  text: 'Obat yang anda pilih telah diubah!',
+               });
+               $('#edit-modal').modal('hide');
+               $('#obat-tables').DataTable().ajax.reload();
+            }
+         });
+        
+      });
+
+      //delete obat
+      $(document).on('click', '.delete-obat-data', function(){
+       var id = $(this).attr("id");
+       $('.delete_obat').attr("id", id);
+    });
+
+    $(document).on('click', '.delete_obat', function(){
+        var id = $(this).attr("id"); 
+        $.ajax({
+           headers: {
+              'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+           },
+           url: "{{ route('obat.delete') }}",
+           method: "GET",
+           data: {id: id},
+           success: function(){          
+                Swal.fire({
+                    type: 'success',
+                    title: 'Berhasil dihapus!',
+                    text: 'Obat yang anda pilih telah dihapus!',
+                });
+                $('#delete-modal').modal('hide');
+                $('#obat-tables').DataTable().ajax.reload();
+           }
+        });
+       
+    });
+
 
 	//GET ALL DATA
 	$(function(){
