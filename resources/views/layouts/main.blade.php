@@ -41,7 +41,6 @@
 
   <script src="{{asset('/template/global_assets/js/demo_pages/datatables_basic.js')}}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
   <!-- /theme JS files -->
   @yield('js')
 </head>

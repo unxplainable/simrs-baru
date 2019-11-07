@@ -49,6 +49,10 @@ Route::get('/', 'Dashboard\DashboardController@index');
 
   // modul rawat jalan
   Route::get('rawat-jalan/pasien', 'RawatJalan\PasienController@index');
+  Route::get('rawat-jalan/pasien-search', 'RawatJalan\PasienController@pasienSearch')->name('rawatJalan.pasienSearch');
+  Route::get('rawat-jalan/data-json', 'RawatJalan\PasienController@dataJSON')->name('rawatJalan.dataJSON');
+  Route::post('rawat-jalan/edit-data', 'RawatJalan\PasienController@UpdateData')->name('rawatJalan.editData');
+  Route::get('rawat-jalan/delete', 'RawatJalan\PasienController@destroy')->name('rawatJalan.delete');
 
   Route::get('rawat-jalan/tindakan', 'RawatJalan\TindakanController@index');
 

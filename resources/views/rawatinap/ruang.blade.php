@@ -210,7 +210,6 @@
             method: "post",
             data: {id: id, formData: JSON.parse(JSON.stringify($('#editForm').serializeArray())) },
             success: function(data){
-                console.log(data)
                Swal.fire({
                   type: 'success',
                   title: 'Ruang berhasil di ubah!',
