@@ -21,17 +21,22 @@ Route::get('/', 'Dashboard\DashboardController@index');
 
   // modul pendaftaran
   Route::get('pendaftaran', 'Pendaftaran\PendaftaranController@index');
-  Route::post('pendaftaran', 'Pendaftaran\PendaftaranController@create');
-
-  Route::delete('pendaftaran/{id}', 'Pendaftaran\PendaftaranController@destroy')->name('pendaftaran.destroy');
+  Route::post('add-pendaftaran', 'Pendaftaran\PendaftaranController@store')->name('pendaftaran.addPendaftaran');
+  Route::post('edit-pendaftaran', 'Pendaftaran\PendaftaranController@updateData')->name('pendaftaran.editPendaftaran');
+  Route::get('pendaftaran-json', 'Pendaftaran\PendaftaranController@pendaftaranJSON')->name('pendaftaran.dataJSON');
+  Route::get('deletePendaftaran', 'Pendaftaran\PendaftaranController@destroy')->name('pendaftaran.delete');
 
   // modul pasien
   Route::get('pasien', 'Pasien\PasienController@index');
-  Route::delete('pasien/{id}', 'Pasien\PasienController@destroy')->name('pasien.destroy');
+  Route::get('pasien-json', 'Pasien\PasienController@pasienJSON')->name('pasien.dataJSON');
+  Route::post('edit-pasien', 'Pasien\PasienController@updateData')->name('pasien.editPasien');
+  Route::get('deletePasien', 'Pasien\PasienController@destroy')->name('pasien.delete');
 
   // modul rawat inap
+  Route::get('pasien-rawat-json', 'RawatInap\PasienRawatController@pasienRawatJSON')->name('pasienRawat.dataJSON');
   Route::get('pasien-rawat', 'RawatInap\PasienRawatController@index');
-
+  Route::get('pasien-rawat/autocomplete', 'RawatInap\PasienRawatController@autoComplete')->name('pasienRawat.autoComplete');
+  Route::get('pasien-rawat-delete', 'RawatInap\PasienRawatController@destroy')->name('pasienRawat.delete');
   Route::get('pasien-keluar', 'RawatInap\PasienKeluarController@index');
 
   Route::get('ruang', 'RawatInap\RuangController@index');
