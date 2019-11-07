@@ -7,7 +7,7 @@
 @section('content')
 <div class="card">
 	<div class="card-header header-elements-inline">
-		<h5 class="card-title">Basic datatable</h5>
+		<h5 class="card-title">Data Tabel Obat</h5>
 	</div>
 
 	<div class="card-header header-elements-inline">
@@ -28,7 +28,7 @@
 	</table>
 </div>
 
-<!--Modal show obat -->
+<!--Modal add obat -->
 <div id="add-modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -67,10 +67,10 @@
                               <label class="col-lg-3 col-form-label">Jenis Obat</label>
                               <div class="col-lg-6">
                                   <select name="jenis_obat" class="form-control">
-                                      <option value="0">Tablet</option>
-                                      <option value="1">Sirup</option>
-									  <option value="2">Kapsul</option>
-									  <option value="0">Bubuk</option>
+                                      <option value="Tablet">Tablet</option>
+                                      <option value="Sirip">Sirup</option>
+									  <option value="Kapsul">Kapsul</option>
+									  <option value="Bubuk">Bubuk</option>
                                   </select>
                                 </div>
                             </div>
@@ -87,7 +87,69 @@
         </div>
     </div>
 </div>
-<!--End Modal show ruangan-->
+<!--End Modal add obat-->
+
+
+<!--Modal edit obat -->
+<div id="edit-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h6 class="modal-title">Form Obat</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-xl-12">
+                    <!-- Form -->
+                    <div class="card-body">
+                        <form id="editForm" name="editForm">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Nama Obat : </label>
+                                <div class="col-lg-9">
+                                    <input name="nama_obat" type="text" class="form-control" placeholder="Nama Obat ">
+                                </div>
+                            </div>
+
+							<div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Dosis Obat : </label>
+                                <div class="col-lg-9">
+                                    <input name="dosis_obat" type="text" class="form-control" placeholder="Dosis Obat ">
+                                </div>
+                            </div>
+							<div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Harga Obat : </label>
+                                <div class="col-lg-9">
+                                    <input name="harga_obat" type="text" class="form-control" placeholder="Harga Obat ">
+                                </div>
+                            </div>
+                            
+
+                            <div class="form-group row">
+                              <label class="col-lg-3 col-form-label">Jenis Obat</label>
+                              <div class="col-lg-6">
+                                  <select name="jenis_obat" class="form-control">
+                                      <option value="Tablet">Tablet</option>
+                                      <option value="Sirup">Sirup</option>
+									  <option value="Kapsul">Kapsul</option>
+									  <option value="Bubuk">Bubuk</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /Form -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-success edit_obat">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal edit obat-->
 
 <!--Modal delete -->
 <div id="delete-modal" class="modal fade" tabindex="-2">
@@ -127,13 +189,13 @@
 			headers: {
                'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
             },
-			rl: "{{ route('obat.addObat') }}",
+			url: "{{ route('obat.addObat') }}",
             method: "post",
 			data: {formData: JSON.parse(JSON.stringify($('#addForm').serializeArray())) },
 			success: function(data){
                Swal.fire({
                   type: 'success',
-                  title: 'Obat berhasil di ditambah!',
+                  title: 'Obat berhasil ditambah!',
                   text: 'Obat telah berhasil ditambahkan!',
                });
                $("#addForm")[0].reset();
@@ -142,6 +204,66 @@
             }
          });
 	});
+
+    //edit obat
+    $(document).on('click', '.edit-obat-data', function(){
+         var id = $(this).attr("id");
+         $('.edit_obat').attr("id", id);
+    });
+
+    $(document).on('click', '.edit_obat', function(e){
+        e.preventDefault();
+         var id = $(this).attr("id");
+        
+         $.ajax({
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+            },
+            url: "{{ route('obat.editObat') }}",
+            method: "post",
+            data: {id: id, formData: JSON.parse(JSON.stringify($('#editForm').serializeArray())) },
+            success: function(data){
+                console.log(data)
+               Swal.fire({
+                  type: 'success',
+                  title: 'Obat berhasil di ubah!',
+                  text: 'Obat yang anda pilih telah diubah!',
+               });
+               $('#edit-modal').modal('hide');
+               $('#obat-tables').DataTable().ajax.reload();
+            }
+         });
+        
+      });
+
+    //delete obat
+    $(document).on('click', '.delete-obat-data', function(){
+       var id = $(this).attr("id");
+       $('.delete_obat').attr("id", id);
+    });
+
+    $(document).on('click', '.delete_obat', function(){
+        var id = $(this).attr("id"); 
+        $.ajax({
+           headers: {
+              'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+           },
+           url: "{{ route('obat.delete') }}",
+           method: "GET",
+           data: {id: id},
+           success: function(){          
+                Swal.fire({
+                    type: 'success',
+                    title: 'Berhasil dihapus!',
+                    text: 'Obat telah dihapus!',
+                });
+                $('#delete-modal').modal('hide');
+                $('#obat-tables').DataTable().ajax.reload();
+           }
+        });
+       
+    });
+  
 
 	//GET ALL DATA
 	$(function(){
