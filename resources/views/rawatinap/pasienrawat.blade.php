@@ -37,35 +37,28 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="#">
+                    <form action="#" id="addForm">
                         <div class="row">
                             <div class="col-md-12">
                                 <fieldset>
                                     <legend class="text-uppercase font-size-sm font-weight-bold"><i class="icon-reading mr-2"></i> IDENTITAS PASIEN</legend>
 
                                     <div class="form-group row">
-                                        <label class="col-lg-4 col-form-label">Nama Pasien :</label>
+                                        <label class="col-lg-4 col-form-label">Pasien :</label>
                                         <div class="col-lg-8">
-                                        <select class="cari form-control form-control-select" name="cari"></select>
+                                            <input type="hidden" name="idPasien" class="form-control id_pasien" />
+                                            <input type="text" name="pasien" class="form-control pasien" id="pasien" />
+                                            <div class="pasienList"></div>  
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-lg-4 col-form-label">Jenis Kelamin:</label>
+                                        <label class="col-lg-4 col-form-label">Jenis Kelaamin:</label>
                                         <div class="col-lg-8">
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <div class="uniform-choice"><span class="checked"><input type="radio" class="form-input-styled" name="gender" checked="" data-fouc=""></span></div>
-                                                    Laki - laki
-                                                </label>
-                                            </div>
-
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <div class="uniform-choice"><span><input type="radio" class="form-input-styled" name="gender" data-fouc=""></span></div>
-                                                    Perempuan
-                                                </label>
-                                            </div>
+                                            <select class="form-control form-control-select">
+                                                <option value="L">Pria</option>
+                                                <option value="P">Wanita</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -89,7 +82,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-4 col-form-label">Nama Poli:</label>
                                         <div class="col-lg-8">
-                                            <select class="form-control form-control-select">
+                                            <select name="id_poli" class="form-control form-control-select">
                                                 <option>Poli Anak</option>
                                                 <option>Poli Bedah</option>
                                                 <option>Poli Gigi</option>
@@ -103,7 +96,7 @@
                         </div>
 
                         <div class="text-right">
-                            <button type="button" class="btn btn-primary">Simpan Data</button>
+                            <button type="button" class="btn btn-primary add-data">Simpan Data</button>
                         </div>
                     </form>
                 </div>
@@ -230,7 +223,7 @@
 @push('scripts')
 <script>
 
-// delete ruangan
+// delete data
 $(document).on('click', '.delete-modal', function(){
        var id = $(this).attr("id");
        $('.delete-data').attr("id", id);
@@ -297,6 +290,64 @@ $(document).on('click', '.delete-modal', function(){
             });
          });
         
+
+    $(document).ready(function(){  
+      $('.pasien').keyup(function(){  
+           var query = $(this).val();  
+           if(query != '')  
+           {  
+                $.ajax({  
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+                    },
+                     url:"{{ route('rawatJalan.pasienSearch') }}",  
+                     method:"GET",  
+                     data:{query:query},  
+                     success:function(data)  
+                     {  
+                         console.log(data);
+                          $('.pasienList').fadeIn();  
+                          $('.pasienList').html(data);  
+                     }  
+                });  
+           }  
+      });  
+      $(document).on('click', 'li', function(){  
+           $('.pasien').val($(this).text());  
+           var id = $(this).attr("id");
+           console.log('idd', id);
+           $('.id_pasien').val(id);  
+           $('.pasienList').fadeOut();  
+      });  
+
+ });
+ 
+ $(document).ready(function(){
+    $(document).on('click', '.add-data', function(e){
+        e.preventDefault();
+
+         $.ajax({
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+            },
+            url: "{{ route('pasienRawat.addData') }}",
+            method: "post",
+            data: {formData: JSON.parse(JSON.stringify($('#addForm').serializeArray())) },
+            success: function(data){
+                console.log(data);
+               Swal.fire({
+                  type: 'success',
+                  title: 'Ruang berhasil di ditambah!',
+                  text: 'Ruangan  anda telah berhasil ditambahkan!',
+               });
+               $("#addForm")[0].reset();
+               $('#add-modal').modal('hide');
+               $('#rawatJalan-tables').DataTable().ajax.reload();
+            }
+         });
+        
+      }); 
+    });
 </script>
 
 @endpush

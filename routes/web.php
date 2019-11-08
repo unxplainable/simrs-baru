@@ -37,6 +37,7 @@ Route::get('/', 'Dashboard\DashboardController@index');
   Route::get('pasien-rawat', 'RawatInap\PasienRawatController@index');
   Route::get('pasien-rawat/autocomplete', 'RawatInap\PasienRawatController@autoComplete')->name('pasienRawat.autoComplete');
   Route::get('pasien-rawat-delete', 'RawatInap\PasienRawatController@destroy')->name('pasienRawat.delete');
+  Route::post('pasien-rawat-add', 'RawatInap\PasienRawatController@store')->name('pasienRawat.addData');
   Route::get('pasien-keluar', 'RawatInap\PasienKeluarController@index');
 
   Route::get('ruang', 'RawatInap\RuangController@index');

@@ -45,11 +45,11 @@
                     <div class="card-body">
                         <form id="addForm" name="addForm">
                         <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Pasien a:</label>
+                                <label class="col-lg-3 col-form-label">Pasien :</label>
                                 <div class="col-lg-9">
-                                    <input type="hidden" name="idPasien" class="form-control" id="id_pasien"/>
-                                    <input type="text" name="pasien" class="form-control" id="pasien" />
-                                    <div id="pasienList"></div>  
+                                    <input type="hidden" name="idPasien" class="form-control id_pasien" />
+                                    <input type="text" name="pasien" class="form-control pasien" id="pasien" />
+                                    <div class="pasienList"></div>  
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -141,9 +141,9 @@
                         <div class="form-group row">
                                 <label class="col-lg-3 col-form-label">Pasien:</label>
                                 <div class="col-lg-9">
-                                    <input type="hidden" name="idPasien" class="form-control" id="id_pasien" value="{{$data->id_pasien}}"/>
-                                    <input type="text" name="pasien" class="form-control" id="pasien" value="{{$data->nama_pasien}}" />
-                                    <div id="pasienList"></div>  
+                                    <input type="hidden" name="id_pasien" class="form-control id_pasien" />
+                                    <input type="text" name="pasien" class="form-control pasien" id="pasien" value="{{$data->nama_pasien}}" />
+                                    <div class="pasienList"></div>  
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -274,7 +274,7 @@ $(document).ready(function(){
       });
 
 $(document).ready(function(){  
-      $('#pasien').keyup(function(){  
+      $('.pasien').keyup(function(){  
            var query = $(this).val();  
            if(query != '')  
            {  
@@ -288,18 +288,18 @@ $(document).ready(function(){
                      success:function(data)  
                      {  
                          console.log(data);
-                          $('#pasienList').fadeIn();  
-                          $('#pasienList').html(data);  
+                          $('.pasienList').fadeIn();  
+                          $('.pasienList').html(data);  
                      }  
                 });  
            }  
       });  
       $(document).on('click', 'li', function(){  
-           $('#pasien').val($(this).text());  
+           $('.pasien').val($(this).text());  
            var id = $(this).attr("id");
            console.log('idd', id);
-           $('#id_pasien').val(id);  
-           $('#pasienList').fadeOut();  
+           $('.id_pasien').val(id);  
+           $('.pasienList').fadeOut();  
       });  
  });  
 
